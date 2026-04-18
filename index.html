@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Google AI Studio App</title>
+    <script>
+      // Early polyfill to prevent "Cannot set property fetch of #<Window>" errors
+      (function() {
+        var originalFetch = window.fetch;
+        if (!originalFetch) return;
+
+        var fetchValue = originalFetch.bind(window);
+        var descriptor = {
+          get: function() { return fetchValue; },
+          set: function(v) { fetchValue = v; },
+          configurable: true,
+          enumerable: true
+        };
+
+        function forceDefine(obj, prop, desc) {
+          try {
+            // Try to delete first to clear any non-configurable/read-only state if possible
+            try { delete obj[prop]; } catch (e) {}
+            Object.defineProperty(obj, prop, desc);
+          } catch (e) {
+            // Fallback to just defining if delete fails
+            try { Object.defineProperty(obj, prop, desc); } catch (e2) {}
+          }
+        }
+
+        // Apply to all possible global locations
+        if (window.Window && window.Window.prototype) {
+          forceDefine(window.Window.prototype, 'fetch', descriptor);
+        }
+        forceDefine(window, 'fetch', descriptor);
+        if (window.globalThis) {
+          forceDefine(window.globalThis, 'fetch', descriptor);
+        }
+        
+        // Polyfill global and process for libraries that expect them
+        window.global = window;
+        window.process = { env: { NODE_ENV: 'development' }, browser: true };
+      })();
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" crossorigin="anonymous" src="/src/main.tsx"></script>
+  </body>
+</html>
+

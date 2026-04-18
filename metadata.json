@@ -1,0 +1,6 @@
+{
+  "name": "Smart SMTP Mailer",
+  "description": "A beautiful and smart email sender using SMTP with AI-powered drafting capabilities.",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

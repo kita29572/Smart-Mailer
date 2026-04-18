@@ -1,0 +1,39 @@
+{
+  "entities": {
+    "campaigns": {
+      "title": "Campaign",
+      "description": "Stores metadata about email campaigns",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "name": { "type": "string" },
+        "subject": { "type": "string" },
+        "createdAt": { "type": "string", "format": "date-time" },
+        "totalSent": { "type": "number" },
+        "uid": { "type": "string" }
+      },
+      "required": ["id", "name", "createdAt", "uid"]
+    },
+    "unsubscribes": {
+      "title": "Unsubscribe",
+      "description": "Stores opted-out email addresses",
+      "type": "object",
+      "properties": {
+        "email": { "type": "string" },
+        "unsubscribedAt": { "type": "string", "format": "date-time" },
+        "uid": { "type": "string" }
+      },
+      "required": ["email", "unsubscribedAt", "uid"]
+    }
+  },
+  "firestore": {
+    "/campaigns/{campaignId}": {
+      "schema": "campaigns",
+      "description": "Collection of campaigns"
+    },
+    "/unsubscribes/{unsubscribeId}": {
+      "schema": "unsubscribes",
+      "description": "Collection of unsubscribed emails"
+    }
+  }
+}
